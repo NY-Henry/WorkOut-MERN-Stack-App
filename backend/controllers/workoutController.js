@@ -31,6 +31,26 @@ export const getSingleWorkout = async (req, res) => {
 // Create new workout
 export const createWorkout = async (req, res) => {
   const { title, reps, load } = req.body;
+
+  // Check if any field is missing
+  const emptyFields = [];
+
+  if (!title) {
+    emptyFields.push("title");
+  }
+  if (!reps) {
+    emptyFields.push("reps");
+  }
+  if (!load) {
+    emptyFields.push("load");
+  }
+
+  if (emptyFields.length > 0) {
+    return res
+      .status(400)
+      .json({ error: "All fields are required", emptyFields });
+  }
+
   // Add doc to db
   try {
     const workout = await Workout.create({ title, reps, load });
@@ -53,7 +73,7 @@ export const deleteWorkout = async (req, res) => {
     return res.status(404).json({ error: "No such workout found" });
   }
 
-  res.status(200).json({ message: "Workout deleted successfully" });
+  res.status(200).json(workout);
 };
 
 // Update a workout

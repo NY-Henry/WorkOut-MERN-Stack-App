@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import routes from "./routes/workouts.js";
 import mongoose from "mongoose";
+import cors from "cors";
 dotenv.config();
 
 const PORT = process.env.PORT;
@@ -10,6 +11,7 @@ const PORT = process.env.PORT;
 const app = express();
 
 // middleware
+app.use(cors());
 app.use(express.json());
 
 // MiddleWare
@@ -28,7 +30,7 @@ mongoose
   .then(() => {
     console.log("Connected to MongoDB");
     // listen for requests
-    app.listen(4000, () => {
+    app.listen(PORT, () => {
       console.log(`server started on http://localhost:${PORT}`);
     });
   })
